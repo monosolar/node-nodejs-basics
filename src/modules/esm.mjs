@@ -2,9 +2,8 @@ import path from 'path';
 import { release, version } from 'os';
 import { createServer as createServerHttp } from 'http';
 import './files/c.js';
-import aFile from './files/a.json' assert { type: 'json' };
-import bFile from './files/b.json' assert { type: 'json' };
 import { fileURLToPath } from 'url';
+import fs from 'node:fs';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -14,9 +13,13 @@ const random = Math.random();
 let unknownObject;
 
 if (random > 0.5) {
-  unknownObject = aFile;
+  unknownObject = JSON.parse(
+    fs.readFileSync(path.resolve(__dirname, './files/a.json')),
+  );
 } else {
-  unknownObject = bFile;
+  unknownObject = JSON.parse(
+    fs.readFileSync(path.resolve(__dirname, './files/b.json')),
+  );
 }
 
 console.log(`Release ${release()}`);
